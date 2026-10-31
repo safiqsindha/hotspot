@@ -5,5 +5,6 @@ __pycache__/
 *.egg-info/
 dist/
 build/
-runs/*.jsonl
+runs/*
+!runs/.gitkeep
 .DS_Store

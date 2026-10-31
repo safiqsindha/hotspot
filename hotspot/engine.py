@@ -128,12 +128,21 @@ def _resolve_point(world: World, state: State, x: float, y: float) -> Hotspot | 
 
 
 def _verb_allowed(spec: VerbSpec, state: State, action: dict) -> bool:
-    if spec.with_item is not None and action.get("item") != spec.with_item:
-        return False
-    return _requires_ok(spec, state)
+    return requirements_met(spec, state, action)
 
 
-def _requires_ok(spec: VerbSpec, state: State) -> bool:
+def requirements_met(spec: VerbSpec, state: State, action: dict | None = None) -> bool:
+    """True when ``spec`` may fire in ``state``.
+
+    This is the only requirements check. ``with_item`` must be in the
+    inventory, and when ``action`` is given it must name that item. The
+    solver and ``step`` both call this.
+    """
+    if spec.with_item is not None:
+        if spec.with_item not in state.inventory:
+            return False
+        if action is not None and action.get("item") != spec.with_item:
+            return False
     requires = spec.requires
     if requires is None:
         return True

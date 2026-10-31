@@ -88,6 +88,7 @@ class ItemLayer(_Model):
     id: str
     item: str | None = None
     visible: bool = True
+    decoy: bool = False
     shape: Shape
 
 
@@ -106,11 +107,26 @@ class Scene(_Model):
 
 class Goal(_Model):
     flag: str
+    description: str | None = None
+
+
+class MapsTo(_Model):
+    item: str | None = None
+    flag: str | None = None
+    hotspot: str | None = None
+
+    @model_validator(mode="after")
+    def _exactly_one(self) -> MapsTo:
+        chosen = [name for name in ("item", "flag", "hotspot") if getattr(self, name) is not None]
+        if len(chosen) != 1:
+            raise ValueError("maps_to must set exactly one of item, flag, hotspot")
+        return self
 
 
 class PuzzleNode(_Model):
     id: str
     kind: Literal["action", "goal"]
+    maps_to: MapsTo | None = None
 
 
 class PuzzleGraph(_Model):

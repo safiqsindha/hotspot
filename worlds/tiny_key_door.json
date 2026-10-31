@@ -2,7 +2,7 @@
   "id": "tiny_key_door",
   "title": "The Locked Shed",
   "start_scene": "yard",
-  "goal": {"flag": "shed_open"},
+  "goal": {"flag": "shed_open", "description": "Get into the shed."},
   "scenes": [
     {
       "id": "yard",
@@ -49,8 +49,8 @@
   ],
   "puzzle_graph": {
     "nodes": [
-      {"id": "get_key", "kind": "action"},
-      {"id": "open_shed", "kind": "goal"}
+      {"id": "get_key", "kind": "action", "maps_to": {"item": "key"}},
+      {"id": "open_shed", "kind": "goal", "maps_to": {"flag": "shed_open"}}
     ],
     "edges": [["get_key", "open_shed"]]
   }

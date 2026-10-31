@@ -1,0 +1,341 @@
+{
+  "id": "two_scene_fetch_01",
+  "title": "Fetch the blue gem.",
+  "start_scene": "hall",
+  "goal": {
+    "flag": "altar_lit",
+    "description": "Bring the blue gem back to the altar."
+  },
+  "scenes": [
+    {
+      "id": "hall",
+      "background": {
+        "color": "#1a1a2e"
+      },
+      "shapes": [
+        {
+          "kind": "rect",
+          "box": [
+            0.0,
+            0.5,
+            1.0,
+            1.0
+          ],
+          "points": null,
+          "color": "#2c3e50",
+          "label": "ground"
+        },
+        {
+          "kind": "rect",
+          "box": [
+            0.68,
+            0.08,
+            0.96,
+            0.44
+          ],
+          "points": null,
+          "color": "#c9a0ff",
+          "label": "altar"
+        },
+        {
+          "kind": "rect",
+          "box": [
+            0.68,
+            0.58,
+            0.96,
+            0.92
+          ],
+          "points": null,
+          "color": "#f4efe6",
+          "label": "arch"
+        }
+      ],
+      "item_layers": [],
+      "hotspots": [
+        {
+          "id": "altar",
+          "name": "stone altar",
+          "polygon": [
+            [
+              0.68,
+              0.08
+            ],
+            [
+              0.96,
+              0.08
+            ],
+            [
+              0.96,
+              0.44
+            ],
+            [
+              0.68,
+              0.44
+            ]
+          ],
+          "requires_layer_visible": null,
+          "verbs": {
+            "look": {
+              "text": "You look at the stone altar.",
+              "with_item": null,
+              "requires": null,
+              "effects": []
+            },
+            "use": {
+              "text": null,
+              "with_item": "gem",
+              "requires": {
+                "flag": null,
+                "not_flag": "altar_lit",
+                "has_item": null,
+                "layer_visible": null
+              },
+              "effects": [
+                {
+                  "set_flag": "altar_lit",
+                  "clear_flag": null,
+                  "give_item": null,
+                  "remove_item": "gem",
+                  "show_layer": null,
+                  "hide_layer": null,
+                  "goto_scene": null,
+                  "text": "You set the blue gem on the altar."
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "exits": [
+        {
+          "id": "to_grove",
+          "name": "garden arch",
+          "polygon": [
+            [
+              0.68,
+              0.58
+            ],
+            [
+              0.96,
+              0.58
+            ],
+            [
+              0.96,
+              0.92
+            ],
+            [
+              0.68,
+              0.92
+            ]
+          ],
+          "requires_layer_visible": null,
+          "verbs": {
+            "look": {
+              "text": "You could go through the garden arch.",
+              "with_item": null,
+              "requires": null,
+              "effects": []
+            },
+            "go": {
+              "text": null,
+              "with_item": null,
+              "requires": null,
+              "effects": [
+                {
+                  "set_flag": null,
+                  "clear_flag": null,
+                  "give_item": null,
+                  "remove_item": null,
+                  "show_layer": null,
+                  "hide_layer": null,
+                  "goto_scene": "grove",
+                  "text": "You walk into the grove."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "grove",
+      "background": {
+        "color": "#0e2418"
+      },
+      "shapes": [
+        {
+          "kind": "rect",
+          "box": [
+            0.0,
+            0.5,
+            1.0,
+            1.0
+          ],
+          "points": null,
+          "color": "#2c3e50",
+          "label": "ground"
+        },
+        {
+          "kind": "rect",
+          "box": [
+            0.68,
+            0.58,
+            0.96,
+            0.92
+          ],
+          "points": null,
+          "color": "#f4efe6",
+          "label": "arch"
+        }
+      ],
+      "item_layers": [
+        {
+          "id": "gem_layer",
+          "item": "gem",
+          "visible": true,
+          "decoy": false,
+          "shape": {
+            "kind": "rect",
+            "box": [
+              0.04,
+              0.08,
+              0.32,
+              0.44
+            ],
+            "points": null,
+            "color": "#00e5ff",
+            "label": null
+          }
+        }
+      ],
+      "hotspots": [
+        {
+          "id": "gem_spot",
+          "name": "blue gem",
+          "polygon": [
+            [
+              0.04,
+              0.08
+            ],
+            [
+              0.32,
+              0.08
+            ],
+            [
+              0.32,
+              0.44
+            ],
+            [
+              0.04,
+              0.44
+            ]
+          ],
+          "requires_layer_visible": "gem_layer",
+          "verbs": {
+            "look": {
+              "text": "A blue gem lying in plain sight.",
+              "with_item": null,
+              "requires": null,
+              "effects": []
+            },
+            "take": {
+              "text": null,
+              "with_item": null,
+              "requires": null,
+              "effects": [
+                {
+                  "set_flag": null,
+                  "clear_flag": null,
+                  "give_item": "gem",
+                  "remove_item": null,
+                  "show_layer": null,
+                  "hide_layer": "gem_layer",
+                  "goto_scene": null,
+                  "text": "You take the blue gem."
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "exits": [
+        {
+          "id": "to_hall",
+          "name": "arch to the hall",
+          "polygon": [
+            [
+              0.68,
+              0.58
+            ],
+            [
+              0.96,
+              0.58
+            ],
+            [
+              0.96,
+              0.92
+            ],
+            [
+              0.68,
+              0.92
+            ]
+          ],
+          "requires_layer_visible": null,
+          "verbs": {
+            "look": {
+              "text": "You could go through the arch to the hall.",
+              "with_item": null,
+              "requires": null,
+              "effects": []
+            },
+            "go": {
+              "text": null,
+              "with_item": null,
+              "requires": null,
+              "effects": [
+                {
+                  "set_flag": null,
+                  "clear_flag": null,
+                  "give_item": null,
+                  "remove_item": null,
+                  "show_layer": null,
+                  "hide_layer": null,
+                  "goto_scene": "hall",
+                  "text": "You return to the hall."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "puzzle_graph": {
+    "nodes": [
+      {
+        "id": "get_gem",
+        "kind": "action",
+        "maps_to": {
+          "item": "gem",
+          "flag": null,
+          "hotspot": null
+        }
+      },
+      {
+        "id": "offered",
+        "kind": "goal",
+        "maps_to": {
+          "item": null,
+          "flag": "altar_lit",
+          "hotspot": null
+        }
+      }
+    ],
+    "edges": [
+      [
+        "get_gem",
+        "offered"
+      ]
+    ]
+  }
+}

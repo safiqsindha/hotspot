@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections import deque
 from dataclasses import dataclass, field
 
-from hotspot.engine import hotspot_active, iter_hotspots, scene_by_id, step
+from hotspot.engine import hotspot_active, iter_hotspots, requirements_met, scene_by_id, step
 from hotspot.schema import VERBS, World
 from hotspot.state import State, initial_state
 
@@ -59,30 +59,13 @@ def legal_actions(world: World, state: State) -> list[dict]:
                 continue
             action = {"verb": verb, "target": hotspot.id}
             if spec.with_item is not None:
-                if spec.with_item not in state.inventory:
-                    continue
                 action["item"] = spec.with_item
-            if not _requirements_met(spec, state):
+            if not requirements_met(spec, state, action):
                 continue
             _new_state, _obs, info = step(world, state, action)
             if info["state_changed"]:
                 actions.append(action)
     return actions
-
-
-def _requirements_met(spec, state: State) -> bool:
-    requires = spec.requires
-    if requires is None:
-        return True
-    if requires.flag is not None and requires.flag not in state.flags:
-        return False
-    if requires.not_flag is not None and requires.not_flag in state.flags:
-        return False
-    if requires.has_item is not None and requires.has_item not in state.inventory:
-        return False
-    if requires.layer_visible is not None and requires.layer_visible not in state.visible_layers:
-        return False
-    return True
 
 
 def _reconstruct(parents: dict, state: State) -> list[dict]:

@@ -47,7 +47,6 @@ def reference_issues(world: World) -> list[Issue]:
             if hotspot.id in hotspot_ids:
                 issues.append(_err("duplicate_id", f"duplicate hotspot id {hotspot.id!r}"))
             hotspot_ids.add(hotspot.id)
-
     if world.start_scene not in scenes:
         issues.append(_err("missing_scene", f"start_scene {world.start_scene!r} does not exist"))
 
@@ -129,6 +128,18 @@ def reference_issues(world: World) -> list[Issue]:
                                 f"{hotspot.id}.{verb} removes {effect.remove_item!r}, which is never given",
                             )
                         )
+    for node in world.puzzle_graph.nodes:
+        mapped = node.maps_to
+        if mapped is None:
+            continue
+        if mapped.item is not None and mapped.item not in given:
+            issues.append(_err("dangling_maps_to", f"node {node.id!r} maps to missing item {mapped.item!r}"))
+        if mapped.flag is not None and mapped.flag not in flags:
+            issues.append(_err("dangling_maps_to", f"node {node.id!r} maps to missing flag {mapped.flag!r}"))
+        if mapped.hotspot is not None and mapped.hotspot not in hotspot_ids:
+            issues.append(
+                _err("dangling_maps_to", f"node {node.id!r} maps to missing hotspot {mapped.hotspot!r}")
+            )
     return issues
 
 
@@ -176,13 +187,21 @@ def graph_structure_issues(world: World) -> list[Issue]:
         for hotspot in iter_hotspots(scene)
     }
     for node in nodes:
-        if not _node_maps(node.id, node.kind, items, flags, hotspots, world.goal.flag):
+        if node.maps_to is None:
             issues.append(
-                _err(
-                    "unmapped_node",
-                    f"puzzle node {node.id!r} does not map to an item, flag, or hotspot",
+                Issue(
+                    level="warning",
+                    code="legacy_node_mapping",
+                    message=f"puzzle node {node.id!r} has no maps_to; using the legacy name convention",
                 )
             )
+            if not _node_maps(node.id, node.kind, items, flags, hotspots, world.goal.flag):
+                issues.append(
+                    _err(
+                        "unmapped_node",
+                        f"puzzle node {node.id!r} does not map to an item, flag, or hotspot",
+                    )
+                )
     return issues
 
 
@@ -223,9 +242,15 @@ def gameplay_issues(world: World, max_states: int) -> list[Issue]:
                 continue
             break
 
+    decoys = {
+        layer.item
+        for scene in world.scenes
+        for layer in scene.item_layers
+        if layer.decoy and layer.item
+    }
     given, _flags = _defined_items_and_flags(world)
     used = _used_items(world)
-    for item in sorted(given - used):
+    for item in sorted(given - used - decoys):
         issues.append(_err("unused_item", f"item {item!r} is given but never used"))
 
     reachable_ids: set[str] = set()
@@ -250,16 +275,35 @@ def gameplay_issues(world: World, max_states: int) -> list[Issue]:
     return issues
 
 
-def nodes_satisfied(world: World, state: State) -> set[str]:
-    """Puzzle nodes whose item or flag is true in this state (not sticky)."""
+def nodes_satisfied(world: World, state: State, used_hotspots: frozenset[str] | set[str] | None = None) -> set[str]:
+    """Puzzle nodes that are true in this state.
+
+    ``maps_to`` wins when it is set. Otherwise the legacy name convention is
+    used. Hotspot mappings are true only when that hotspot is in
+    ``used_hotspots`` (a state-changing interaction earlier on the path).
+    """
+    used = used_hotspots or frozenset()
     found = set()
     for node in world.puzzle_graph.nodes:
-        if _node_true(node.id, state):
+        if node.maps_to is not None:
+            if _mapped_true(node.maps_to, state, used):
+                found.add(node.id)
+        elif _legacy_node_true(node.id, state):
             found.add(node.id)
     return found
 
 
-def _node_true(node_id: str, state: State) -> bool:
+def _mapped_true(mapped, state: State, used) -> bool:
+    if mapped.item is not None:
+        return mapped.item in state.inventory
+    if mapped.flag is not None:
+        return mapped.flag in state.flags
+    if mapped.hotspot is not None:
+        return mapped.hotspot in used
+    return False
+
+
+def _legacy_node_true(node_id: str, state: State) -> bool:
     reversed_id = "_".join(reversed(node_id.split("_")))
     if node_id in state.flags or reversed_id in state.flags:
         return True
@@ -277,9 +321,10 @@ def _graph_order_issues(world: World, max_states: int) -> list[Issue]:
     if not edges:
         return []
     start = initial_state(world)
-    sticky = frozenset(nodes_satisfied(world, start))
-    queue = deque([(start, sticky)])
-    seen = {(start, sticky)}
+    used0: frozenset[str] = frozenset()
+    sticky = frozenset(nodes_satisfied(world, start, used0))
+    queue = deque([(start, sticky, used0)])
+    seen = {(start, sticky, used0)}
     reported: set[tuple[str, str]] = set()
     issues: list[Issue] = []
     expanded = 0
@@ -287,13 +332,15 @@ def _graph_order_issues(world: World, max_states: int) -> list[Issue]:
         if expanded >= max_states:
             issues.append(_err("search_exhausted", "puzzle-graph check hit the state cap"))
             break
-        state, have = queue.popleft()
+        state, have, used = queue.popleft()
         expanded += 1
         for action in legal_actions(world, state):
             new_state, _obs, info = step(world, state, action)
             if not info["state_changed"]:
                 continue
-            gained = frozenset(nodes_satisfied(world, new_state))
+            hit = info.get("hit_hotspot")
+            new_used = used | (frozenset([hit]) if hit else frozenset())
+            gained = frozenset(nodes_satisfied(world, new_state, new_used))
             new_have = have | gained
             for src, dst in edges:
                 if dst in new_have and src not in new_have and (src, dst) not in reported:
@@ -304,10 +351,10 @@ def _graph_order_issues(world: World, max_states: int) -> list[Issue]:
                             f"node {dst!r} was reached without {src!r}",
                         )
                     )
-            key = (new_state, new_have)
+            key = (new_state, new_have, new_used)
             if key not in seen:
                 seen.add(key)
-                queue.append((new_state, new_have))
+                queue.append((new_state, new_have, new_used))
     return issues
 
 

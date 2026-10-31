@@ -2,7 +2,7 @@
   "id": "rope_and_well",
   "title": "The Dry Well",
   "start_scene": "courtyard",
-  "goal": {"flag": "water_raised"},
+  "goal": {"flag": "water_raised", "description": "Raise a bucket of water from the well."},
   "scenes": [
     {
       "id": "courtyard",
@@ -215,11 +215,11 @@
   ],
   "puzzle_graph": {
     "nodes": [
-      {"id": "get_rope", "kind": "action"},
-      {"id": "get_hook", "kind": "action"},
-      {"id": "get_bucket", "kind": "action"},
-      {"id": "make_rig", "kind": "action"},
-      {"id": "raised_water", "kind": "goal"}
+      {"id": "get_rope", "kind": "action", "maps_to": {"item": "rope"}},
+      {"id": "get_hook", "kind": "action", "maps_to": {"item": "hook"}},
+      {"id": "get_bucket", "kind": "action", "maps_to": {"item": "bucket"}},
+      {"id": "make_rig", "kind": "action", "maps_to": {"item": "rig"}},
+      {"id": "raised_water", "kind": "goal", "maps_to": {"flag": "water_raised"}}
     ],
     "edges": [
       ["get_rope", "make_rig"],

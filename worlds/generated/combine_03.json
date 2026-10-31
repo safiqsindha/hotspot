@@ -1,0 +1,372 @@
+{
+  "id": "combine_03",
+  "title": "Make a iron crowbar.",
+  "start_scene": "workshop",
+  "goal": {
+    "flag": "device_on",
+    "description": "Combine the oil torch and the gold coin, then use the iron crowbar."
+  },
+  "scenes": [
+    {
+      "id": "workshop",
+      "background": {
+        "color": "#10241c"
+      },
+      "shapes": [
+        {
+          "kind": "rect",
+          "box": [
+            0.0,
+            0.5,
+            1.0,
+            1.0
+          ],
+          "points": null,
+          "color": "#2c3e50",
+          "label": "ground"
+        },
+        {
+          "kind": "rect",
+          "box": [
+            0.38,
+            0.3,
+            0.62,
+            0.62
+          ],
+          "points": null,
+          "color": "#e0a060",
+          "label": "bench"
+        },
+        {
+          "kind": "rect",
+          "box": [
+            0.68,
+            0.56,
+            0.96,
+            0.92
+          ],
+          "points": null,
+          "color": "#c9a0ff",
+          "label": "device"
+        }
+      ],
+      "item_layers": [
+        {
+          "id": "torch_layer",
+          "item": "torch",
+          "visible": true,
+          "decoy": false,
+          "shape": {
+            "kind": "rect",
+            "box": [
+              0.04,
+              0.08,
+              0.32,
+              0.42
+            ],
+            "points": null,
+            "color": "#ff5a1f",
+            "label": null
+          }
+        },
+        {
+          "id": "coin_layer",
+          "item": "coin",
+          "visible": true,
+          "decoy": false,
+          "shape": {
+            "kind": "rect",
+            "box": [
+              0.68,
+              0.08,
+              0.96,
+              0.42
+            ],
+            "points": null,
+            "color": "#ffe14a",
+            "label": null
+          }
+        }
+      ],
+      "hotspots": [
+        {
+          "id": "torch_spot",
+          "name": "oil torch",
+          "polygon": [
+            [
+              0.04,
+              0.08
+            ],
+            [
+              0.32,
+              0.08
+            ],
+            [
+              0.32,
+              0.42
+            ],
+            [
+              0.04,
+              0.42
+            ]
+          ],
+          "requires_layer_visible": "torch_layer",
+          "verbs": {
+            "look": {
+              "text": "A oil torch lying in plain sight.",
+              "with_item": null,
+              "requires": null,
+              "effects": []
+            },
+            "take": {
+              "text": null,
+              "with_item": null,
+              "requires": null,
+              "effects": [
+                {
+                  "set_flag": null,
+                  "clear_flag": null,
+                  "give_item": "torch",
+                  "remove_item": null,
+                  "show_layer": null,
+                  "hide_layer": "torch_layer",
+                  "goto_scene": null,
+                  "text": "You take the oil torch."
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "coin_spot",
+          "name": "gold coin",
+          "polygon": [
+            [
+              0.68,
+              0.08
+            ],
+            [
+              0.96,
+              0.08
+            ],
+            [
+              0.96,
+              0.42
+            ],
+            [
+              0.68,
+              0.42
+            ]
+          ],
+          "requires_layer_visible": "coin_layer",
+          "verbs": {
+            "look": {
+              "text": "A gold coin lying in plain sight.",
+              "with_item": null,
+              "requires": null,
+              "effects": []
+            },
+            "take": {
+              "text": null,
+              "with_item": null,
+              "requires": null,
+              "effects": [
+                {
+                  "set_flag": null,
+                  "clear_flag": null,
+                  "give_item": "coin",
+                  "remove_item": null,
+                  "show_layer": null,
+                  "hide_layer": "coin_layer",
+                  "goto_scene": null,
+                  "text": "You take the gold coin."
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "bench",
+          "name": "workbench",
+          "polygon": [
+            [
+              0.38,
+              0.3
+            ],
+            [
+              0.62,
+              0.3
+            ],
+            [
+              0.62,
+              0.62
+            ],
+            [
+              0.38,
+              0.62
+            ]
+          ],
+          "requires_layer_visible": null,
+          "verbs": {
+            "look": {
+              "text": "A bench. The oil torch and the gold coin might fit together.",
+              "with_item": null,
+              "requires": null,
+              "effects": []
+            },
+            "use": {
+              "text": null,
+              "with_item": "torch",
+              "requires": {
+                "flag": null,
+                "not_flag": null,
+                "has_item": "coin",
+                "layer_visible": null
+              },
+              "effects": [
+                {
+                  "set_flag": null,
+                  "clear_flag": null,
+                  "give_item": null,
+                  "remove_item": "torch",
+                  "show_layer": null,
+                  "hide_layer": null,
+                  "goto_scene": null,
+                  "text": "You combine them into a iron crowbar."
+                },
+                {
+                  "set_flag": null,
+                  "clear_flag": null,
+                  "give_item": null,
+                  "remove_item": "coin",
+                  "show_layer": null,
+                  "hide_layer": null,
+                  "goto_scene": null,
+                  "text": null
+                },
+                {
+                  "set_flag": null,
+                  "clear_flag": null,
+                  "give_item": "crowbar",
+                  "remove_item": null,
+                  "show_layer": null,
+                  "hide_layer": null,
+                  "goto_scene": null,
+                  "text": null
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "device",
+          "name": "strange device",
+          "polygon": [
+            [
+              0.68,
+              0.56
+            ],
+            [
+              0.96,
+              0.56
+            ],
+            [
+              0.96,
+              0.92
+            ],
+            [
+              0.68,
+              0.92
+            ]
+          ],
+          "requires_layer_visible": null,
+          "verbs": {
+            "look": {
+              "text": "You look at the strange device.",
+              "with_item": null,
+              "requires": null,
+              "effects": []
+            },
+            "use": {
+              "text": null,
+              "with_item": "crowbar",
+              "requires": {
+                "flag": null,
+                "not_flag": "device_on",
+                "has_item": null,
+                "layer_visible": null
+              },
+              "effects": [
+                {
+                  "set_flag": "device_on",
+                  "clear_flag": null,
+                  "give_item": null,
+                  "remove_item": "crowbar",
+                  "show_layer": null,
+                  "hide_layer": null,
+                  "goto_scene": null,
+                  "text": "The iron crowbar clicks into the device."
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "exits": []
+    }
+  ],
+  "puzzle_graph": {
+    "nodes": [
+      {
+        "id": "get_torch",
+        "kind": "action",
+        "maps_to": {
+          "item": "torch",
+          "flag": null,
+          "hotspot": null
+        }
+      },
+      {
+        "id": "get_coin",
+        "kind": "action",
+        "maps_to": {
+          "item": "coin",
+          "flag": null,
+          "hotspot": null
+        }
+      },
+      {
+        "id": "make_crowbar",
+        "kind": "action",
+        "maps_to": {
+          "item": "crowbar",
+          "flag": null,
+          "hotspot": null
+        }
+      },
+      {
+        "id": "powered",
+        "kind": "goal",
+        "maps_to": {
+          "item": null,
+          "flag": "device_on",
+          "hotspot": null
+        }
+      }
+    ],
+    "edges": [
+      [
+        "get_torch",
+        "make_crowbar"
+      ],
+      [
+        "get_coin",
+        "make_crowbar"
+      ],
+      [
+        "make_crowbar",
+        "powered"
+      ]
+    ]
+  }
+}

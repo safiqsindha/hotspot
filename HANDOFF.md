@@ -1,35 +1,35 @@
-# Handoff — Hotspot Phase 0
+# Handoff — Hotspot Phase 1
 
 ## Built
 
-World schema (Pydantic, extra fields forbidden), JSON loader, hashable state, engine, BFS solver, publishability checks, Pillow renderer with four fidelity tiers, episode harness with JSONL logs, `random` and `oracle` agents, and two worlds: `tiny_key_door` (2 steps) and `rope_and_well` (7 steps). Tests in `tests/` are the contract.
+Phase 0 (schema, solver, renderer, oracle/random harness, two worlds) plus: one `requirements_met` used by `step` and the solver; four end-of-episode coverage classes; a separate zoom budget; explicit `maps_to` on puzzle nodes; an LLM agent (Anthropic, OpenAI-compatible including xAI, and `ScriptedClient`); difficulty dials; a six-template generator; contact sheets; a batch CSV runner. Core deps are still pydantic and pillow. `pip install -e ".[llm]"` adds no packages.
 
 ## Decisions the brief did not spell out
 
-- Exits are extra hotspots, hit-tested after the scene list. The last polygon that contains the point wins.
-- One verb key per hotspot. The coin's optional use is its own hotspot (`wishing_niche`), not a second `use` on the well.
-- `Requires` is a conjunction, and it has a single `has_item` and a single `flag`. The combine step is `use rope` on the workbench, which also requires `has_item: bucket` and `flag: holding_hook` (set when the hook is taken).
-- Puzzle node ids map by exact item/flag/hotspot id, `get_<item>`, `make_<item>`, or token reversal onto a flag (`open_shed` ↔ `shed_open`). Edges are checked against sticky achievement on every reachable path, so consuming an item does not forget that you found it.
-- Coverage "required" hotspots are the targets on the optimal path. `clicked` / `zoomed` / `used_correctly` separate never looked, looked, and used for a state change.
-- Zoom does not change state. The engine records the box; the harness renders the crop from a higher-resolution paint. Invalid actions return the text `Nothing happens.`
-- Tiers do not share one bitmap: 320×200, 640×480, and 1280×720 have different aspect ratios, so a 16:9 master would squash. Each tier is painted from the same normalized geometry at an integer scale and nearest-neighbour downscaled, then quantized with no dither. Images that already use fewer colours than the cap are left as-is, which keeps the key and the rope visible at `retro_320`.
-- The example key was 22×12 px at `retro_320` and disappeared into the grass. It is now a 70×44 px gold block, and the shed has a darker door shape so the clickable door is visible. Hotspot ids and the 2-step path are unchanged. The coin niche is a black crack so the red herring is visible too.
+- `requirements_met(spec, state, action=None)` lives in `engine.py`. `with_item` must already be in the inventory, and the action's `item` must match. The solver only emits actions that change state.
+- Coverage class priority is `used_correctly` > `found_but_misused` > `looked_but_missed` > `never_looked`. `used_correctly` means every optimal-path `(verb, item)` for that hotspot was issued (symbolic target or pixel hit). A state change is not required. Old booleans remain.
+- Zooms inside the budget do not touch `actions_used`, `wasted_actions`, or the action cap. The 16th zoom (budget 15) is "Nothing happens." After another budget's worth of free refusals, further refusals count as wasted so a zoom-only agent still stops.
+- `maps_to` is exactly one of item, flag, hotspot. Absent `maps_to` warns `legacy_node_mapping` and uses the Phase 0 names. A hotspot mapping is true only after a state-changing hit. `goal.description` falls back to the title.
+- Malformed model output gets two silent re-asks, then `{"verb":"look"}` (a wasted step). History is the last 8 actions. Unknown models price as `null`, not 0. Keys never enter logs or `repr`.
+- Dials JSON-copy the world. Only item-layer shapes and hotspots with `requires_layer_visible` scale. `DialError` carries the validate issues. Decoys stay in-scene and off every hotspot. Presets: easy 1.1/1/0, medium 0.9/3/2/0.35, hard 0.6/5/3/0.85. Medium `rope_and_well` at `retro_320` still shows the rope and the coin.
+- `item_layers[].decoy: true` exempts that item from `unused_item`. `red_herring` uses it. Generator slots are five disjoint rectangles, mirrored three ways, so required sprites stay about 90×70 px at `retro_320`. Signature is template + item names + layout. Manifest `dials` is null.
+- Batch `--max-cost-usd` uses a floor of 0 for oracle/random and one priced call (or $0.01 if unpriced) for an LLM, and will not start an episode that would cross it.
 
 ## Known gaps
 
-- No LLM agents, image-model art, authoring UI, or MCP server (out of scope).
-- No generic inventory-to-inventory craft UI; combine is a hotspot `use`.
-- Solver, dead-end search, and puzzle-graph search each stop at 100k states.
-- Pixel observations hide hotspot names. The oracle is allowed to turn the symbolic path into centroids because it already knows the world.
-- Debug overlay is a test/screenshot aid. Do not feed it to agents.
+- No live model call was made. Set `HOTSPOT_LIVE_LLM=1` for the skipped smoke test. No image-model art, MCP, or web UI.
+- Generator output is not dialled. Solver and graph search still stop at 100k states.
+- There is no inventory-to-inventory craft UI; combine is a hotspot `use`.
 
 ## Verify
 
 ```bash
 python -m pip install -e ".[dev]"
 pytest
-python -m hotspot.harness --world worlds/rope_and_well.json --agent oracle --mode pixel
-python -m hotspot.render
+python -m hotspot.generate --count 8 --seed 1 --out worlds/generated
+python -m hotspot.batch --worlds worlds/generated --agent oracle --mode pixel --tier retro_320 --seeds 1
+python -m hotspot.dials
+python -m hotspot.contact
 ```
 
-Do not weaken a test to make it pass. `validate()` returning no errors is the publish gate.
+Oracle pixel on the eight generated worlds is 100% completion at efficiency 1.0. Do not weaken a Phase 0 test. `validate()` with no errors is the publish gate.

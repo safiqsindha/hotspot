@@ -1,0 +1,414 @@
+{
+  "id": "chain3_07",
+  "title": "Open the gate with the brass gear.",
+  "start_scene": "yard",
+  "goal": {
+    "flag": "gate_open",
+    "description": "Find a iron hook, get the brass gear, and open the gate."
+  },
+  "scenes": [
+    {
+      "id": "yard",
+      "background": {
+        "color": "#10241c"
+      },
+      "shapes": [
+        {
+          "kind": "rect",
+          "box": [
+            0.0,
+            0.5,
+            1.0,
+            1.0
+          ],
+          "points": null,
+          "color": "#2c3e50",
+          "label": "ground"
+        },
+        {
+          "kind": "rect",
+          "box": [
+            0.68,
+            0.56,
+            0.96,
+            0.92
+          ],
+          "points": null,
+          "color": "#7ec8ff",
+          "label": "gate"
+        },
+        {
+          "kind": "rect",
+          "box": [
+            0.68,
+            0.08,
+            0.96,
+            0.42
+          ],
+          "points": null,
+          "color": "#f4efe6",
+          "label": "cave mouth"
+        }
+      ],
+      "item_layers": [],
+      "hotspots": [
+        {
+          "id": "gate",
+          "name": "locked gate",
+          "polygon": [
+            [
+              0.68,
+              0.56
+            ],
+            [
+              0.96,
+              0.56
+            ],
+            [
+              0.96,
+              0.92
+            ],
+            [
+              0.68,
+              0.92
+            ]
+          ],
+          "requires_layer_visible": null,
+          "verbs": {
+            "look": {
+              "text": "You look at the locked gate.",
+              "with_item": null,
+              "requires": null,
+              "effects": []
+            },
+            "use": {
+              "text": null,
+              "with_item": "gear",
+              "requires": {
+                "flag": null,
+                "not_flag": "gate_open",
+                "has_item": null,
+                "layer_visible": null
+              },
+              "effects": [
+                {
+                  "set_flag": "gate_open",
+                  "clear_flag": null,
+                  "give_item": null,
+                  "remove_item": "gear",
+                  "show_layer": null,
+                  "hide_layer": null,
+                  "goto_scene": null,
+                  "text": "The brass gear opens the gate."
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "exits": [
+        {
+          "id": "to_cave",
+          "name": "cave mouth",
+          "polygon": [
+            [
+              0.68,
+              0.08
+            ],
+            [
+              0.96,
+              0.08
+            ],
+            [
+              0.96,
+              0.42
+            ],
+            [
+              0.68,
+              0.42
+            ]
+          ],
+          "requires_layer_visible": null,
+          "verbs": {
+            "look": {
+              "text": "You could go through the cave mouth.",
+              "with_item": null,
+              "requires": null,
+              "effects": []
+            },
+            "go": {
+              "text": null,
+              "with_item": null,
+              "requires": null,
+              "effects": [
+                {
+                  "set_flag": null,
+                  "clear_flag": null,
+                  "give_item": null,
+                  "remove_item": null,
+                  "show_layer": null,
+                  "hide_layer": null,
+                  "goto_scene": "cave",
+                  "text": "You step into the cave."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "cave",
+      "background": {
+        "color": "#16120e"
+      },
+      "shapes": [
+        {
+          "kind": "rect",
+          "box": [
+            0.0,
+            0.5,
+            1.0,
+            1.0
+          ],
+          "points": null,
+          "color": "#2c3e50",
+          "label": "ground"
+        },
+        {
+          "kind": "rect",
+          "box": [
+            0.38,
+            0.3,
+            0.62,
+            0.62
+          ],
+          "points": null,
+          "color": "#ff2d55",
+          "label": "crate"
+        },
+        {
+          "kind": "rect",
+          "box": [
+            0.68,
+            0.08,
+            0.96,
+            0.42
+          ],
+          "points": null,
+          "color": "#f4efe6",
+          "label": "daylight"
+        }
+      ],
+      "item_layers": [
+        {
+          "id": "hook_layer",
+          "item": "hook",
+          "visible": true,
+          "decoy": false,
+          "shape": {
+            "kind": "rect",
+            "box": [
+              0.04,
+              0.56,
+              0.32,
+              0.92
+            ],
+            "points": null,
+            "color": "#d0d8e6",
+            "label": null
+          }
+        }
+      ],
+      "hotspots": [
+        {
+          "id": "hook_spot",
+          "name": "iron hook",
+          "polygon": [
+            [
+              0.04,
+              0.56
+            ],
+            [
+              0.32,
+              0.56
+            ],
+            [
+              0.32,
+              0.92
+            ],
+            [
+              0.04,
+              0.92
+            ]
+          ],
+          "requires_layer_visible": "hook_layer",
+          "verbs": {
+            "look": {
+              "text": "A iron hook lying in plain sight.",
+              "with_item": null,
+              "requires": null,
+              "effects": []
+            },
+            "take": {
+              "text": null,
+              "with_item": null,
+              "requires": null,
+              "effects": [
+                {
+                  "set_flag": null,
+                  "clear_flag": null,
+                  "give_item": "hook",
+                  "remove_item": null,
+                  "show_layer": null,
+                  "hide_layer": "hook_layer",
+                  "goto_scene": null,
+                  "text": "You take the iron hook."
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "crate",
+          "name": "nailed crate",
+          "polygon": [
+            [
+              0.38,
+              0.3
+            ],
+            [
+              0.62,
+              0.3
+            ],
+            [
+              0.62,
+              0.62
+            ],
+            [
+              0.38,
+              0.62
+            ]
+          ],
+          "requires_layer_visible": null,
+          "verbs": {
+            "look": {
+              "text": "A nailed crate. Something inside glints like a brass gear.",
+              "with_item": null,
+              "requires": null,
+              "effects": []
+            },
+            "use": {
+              "text": null,
+              "with_item": "hook",
+              "requires": null,
+              "effects": [
+                {
+                  "set_flag": null,
+                  "clear_flag": null,
+                  "give_item": "gear",
+                  "remove_item": "hook",
+                  "show_layer": null,
+                  "hide_layer": null,
+                  "goto_scene": null,
+                  "text": "You pry the crate with the iron hook and find a brass gear."
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "exits": [
+        {
+          "id": "to_yard",
+          "name": "way back",
+          "polygon": [
+            [
+              0.68,
+              0.08
+            ],
+            [
+              0.96,
+              0.08
+            ],
+            [
+              0.96,
+              0.42
+            ],
+            [
+              0.68,
+              0.42
+            ]
+          ],
+          "requires_layer_visible": null,
+          "verbs": {
+            "look": {
+              "text": "You could go through the way back.",
+              "with_item": null,
+              "requires": null,
+              "effects": []
+            },
+            "go": {
+              "text": null,
+              "with_item": null,
+              "requires": null,
+              "effects": [
+                {
+                  "set_flag": null,
+                  "clear_flag": null,
+                  "give_item": null,
+                  "remove_item": null,
+                  "show_layer": null,
+                  "hide_layer": null,
+                  "goto_scene": "yard",
+                  "text": "You climb back to the yard."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "puzzle_graph": {
+    "nodes": [
+      {
+        "id": "get_hook",
+        "kind": "action",
+        "maps_to": {
+          "item": "hook",
+          "flag": null,
+          "hotspot": null
+        }
+      },
+      {
+        "id": "get_gear",
+        "kind": "action",
+        "maps_to": {
+          "item": "gear",
+          "flag": null,
+          "hotspot": null
+        }
+      },
+      {
+        "id": "opened",
+        "kind": "goal",
+        "maps_to": {
+          "item": null,
+          "flag": "gate_open",
+          "hotspot": null
+        }
+      }
+    ],
+    "edges": [
+      [
+        "get_hook",
+        "get_gear"
+      ],
+      [
+        "get_gear",
+        "opened"
+      ]
+    ]
+  }
+}

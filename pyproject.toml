@@ -1,6 +1,6 @@
 [project]
 name = "hotspot"
-version = "0.1.0"
+version = "0.2.0"
 description = "Procedural point-and-click worlds with a solver, a renderer, and an agent harness"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -11,6 +11,8 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=8"]
+# Clients use the stdlib. The extra exists so `pip install -e ".[llm]"` is the documented install.
+llm = []
 
 [build-system]
 requires = ["setuptools>=68"]
@@ -18,6 +20,9 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 include = ["hotspot*"]
+
+[tool.setuptools.package-data]
+hotspot = ["llm/*.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

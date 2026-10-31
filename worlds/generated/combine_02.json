@@ -1,0 +1,372 @@
+{
+  "id": "combine_02",
+  "title": "Make a iron hook.",
+  "start_scene": "workshop",
+  "goal": {
+    "flag": "device_on",
+    "description": "Combine the brass bell and the folded map, then use the iron hook."
+  },
+  "scenes": [
+    {
+      "id": "workshop",
+      "background": {
+        "color": "#241810"
+      },
+      "shapes": [
+        {
+          "kind": "rect",
+          "box": [
+            0.0,
+            0.5,
+            1.0,
+            1.0
+          ],
+          "points": null,
+          "color": "#2c3e50",
+          "label": "ground"
+        },
+        {
+          "kind": "rect",
+          "box": [
+            0.38,
+            0.3,
+            0.62,
+            0.62
+          ],
+          "points": null,
+          "color": "#e0a060",
+          "label": "bench"
+        },
+        {
+          "kind": "rect",
+          "box": [
+            0.04,
+            0.56,
+            0.32,
+            0.92
+          ],
+          "points": null,
+          "color": "#c9a0ff",
+          "label": "device"
+        }
+      ],
+      "item_layers": [
+        {
+          "id": "bell_layer",
+          "item": "bell",
+          "visible": true,
+          "decoy": false,
+          "shape": {
+            "kind": "rect",
+            "box": [
+              0.68,
+              0.08,
+              0.96,
+              0.42
+            ],
+            "points": null,
+            "color": "#ff4fd8",
+            "label": null
+          }
+        },
+        {
+          "id": "map_layer",
+          "item": "map",
+          "visible": true,
+          "decoy": false,
+          "shape": {
+            "kind": "rect",
+            "box": [
+              0.04,
+              0.08,
+              0.32,
+              0.42
+            ],
+            "points": null,
+            "color": "#f4e1b5",
+            "label": null
+          }
+        }
+      ],
+      "hotspots": [
+        {
+          "id": "bell_spot",
+          "name": "brass bell",
+          "polygon": [
+            [
+              0.68,
+              0.08
+            ],
+            [
+              0.96,
+              0.08
+            ],
+            [
+              0.96,
+              0.42
+            ],
+            [
+              0.68,
+              0.42
+            ]
+          ],
+          "requires_layer_visible": "bell_layer",
+          "verbs": {
+            "look": {
+              "text": "A brass bell lying in plain sight.",
+              "with_item": null,
+              "requires": null,
+              "effects": []
+            },
+            "take": {
+              "text": null,
+              "with_item": null,
+              "requires": null,
+              "effects": [
+                {
+                  "set_flag": null,
+                  "clear_flag": null,
+                  "give_item": "bell",
+                  "remove_item": null,
+                  "show_layer": null,
+                  "hide_layer": "bell_layer",
+                  "goto_scene": null,
+                  "text": "You take the brass bell."
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "map_spot",
+          "name": "folded map",
+          "polygon": [
+            [
+              0.04,
+              0.08
+            ],
+            [
+              0.32,
+              0.08
+            ],
+            [
+              0.32,
+              0.42
+            ],
+            [
+              0.04,
+              0.42
+            ]
+          ],
+          "requires_layer_visible": "map_layer",
+          "verbs": {
+            "look": {
+              "text": "A folded map lying in plain sight.",
+              "with_item": null,
+              "requires": null,
+              "effects": []
+            },
+            "take": {
+              "text": null,
+              "with_item": null,
+              "requires": null,
+              "effects": [
+                {
+                  "set_flag": null,
+                  "clear_flag": null,
+                  "give_item": "map",
+                  "remove_item": null,
+                  "show_layer": null,
+                  "hide_layer": "map_layer",
+                  "goto_scene": null,
+                  "text": "You take the folded map."
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "bench",
+          "name": "workbench",
+          "polygon": [
+            [
+              0.38,
+              0.3
+            ],
+            [
+              0.62,
+              0.3
+            ],
+            [
+              0.62,
+              0.62
+            ],
+            [
+              0.38,
+              0.62
+            ]
+          ],
+          "requires_layer_visible": null,
+          "verbs": {
+            "look": {
+              "text": "A bench. The brass bell and the folded map might fit together.",
+              "with_item": null,
+              "requires": null,
+              "effects": []
+            },
+            "use": {
+              "text": null,
+              "with_item": "bell",
+              "requires": {
+                "flag": null,
+                "not_flag": null,
+                "has_item": "map",
+                "layer_visible": null
+              },
+              "effects": [
+                {
+                  "set_flag": null,
+                  "clear_flag": null,
+                  "give_item": null,
+                  "remove_item": "bell",
+                  "show_layer": null,
+                  "hide_layer": null,
+                  "goto_scene": null,
+                  "text": "You combine them into a iron hook."
+                },
+                {
+                  "set_flag": null,
+                  "clear_flag": null,
+                  "give_item": null,
+                  "remove_item": "map",
+                  "show_layer": null,
+                  "hide_layer": null,
+                  "goto_scene": null,
+                  "text": null
+                },
+                {
+                  "set_flag": null,
+                  "clear_flag": null,
+                  "give_item": "hook",
+                  "remove_item": null,
+                  "show_layer": null,
+                  "hide_layer": null,
+                  "goto_scene": null,
+                  "text": null
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "device",
+          "name": "strange device",
+          "polygon": [
+            [
+              0.04,
+              0.56
+            ],
+            [
+              0.32,
+              0.56
+            ],
+            [
+              0.32,
+              0.92
+            ],
+            [
+              0.04,
+              0.92
+            ]
+          ],
+          "requires_layer_visible": null,
+          "verbs": {
+            "look": {
+              "text": "You look at the strange device.",
+              "with_item": null,
+              "requires": null,
+              "effects": []
+            },
+            "use": {
+              "text": null,
+              "with_item": "hook",
+              "requires": {
+                "flag": null,
+                "not_flag": "device_on",
+                "has_item": null,
+                "layer_visible": null
+              },
+              "effects": [
+                {
+                  "set_flag": "device_on",
+                  "clear_flag": null,
+                  "give_item": null,
+                  "remove_item": "hook",
+                  "show_layer": null,
+                  "hide_layer": null,
+                  "goto_scene": null,
+                  "text": "The iron hook clicks into the device."
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "exits": []
+    }
+  ],
+  "puzzle_graph": {
+    "nodes": [
+      {
+        "id": "get_bell",
+        "kind": "action",
+        "maps_to": {
+          "item": "bell",
+          "flag": null,
+          "hotspot": null
+        }
+      },
+      {
+        "id": "get_map",
+        "kind": "action",
+        "maps_to": {
+          "item": "map",
+          "flag": null,
+          "hotspot": null
+        }
+      },
+      {
+        "id": "make_hook",
+        "kind": "action",
+        "maps_to": {
+          "item": "hook",
+          "flag": null,
+          "hotspot": null
+        }
+      },
+      {
+        "id": "powered",
+        "kind": "goal",
+        "maps_to": {
+          "item": null,
+          "flag": "device_on",
+          "hotspot": null
+        }
+      }
+    ],
+    "edges": [
+      [
+        "get_bell",
+        "make_hook"
+      ],
+      [
+        "get_map",
+        "make_hook"
+      ],
+      [
+        "make_hook",
+        "powered"
+      ]
+    ]
+  }
+}

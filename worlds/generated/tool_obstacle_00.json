@@ -1,0 +1,341 @@
+{
+  "id": "tool_obstacle_00",
+  "title": "Clear the rubble with the coil of rope.",
+  "start_scene": "yard",
+  "goal": {
+    "flag": "path_clear",
+    "description": "Take the coil of rope and clear the rubble."
+  },
+  "scenes": [
+    {
+      "id": "yard",
+      "background": {
+        "color": "#1a1a2e"
+      },
+      "shapes": [
+        {
+          "kind": "rect",
+          "box": [
+            0.0,
+            0.5,
+            1.0,
+            1.0
+          ],
+          "points": null,
+          "color": "#2c3e50",
+          "label": "ground"
+        },
+        {
+          "kind": "rect",
+          "box": [
+            0.04,
+            0.08,
+            0.32,
+            0.42
+          ],
+          "points": null,
+          "color": "#f4efe6",
+          "label": "passage"
+        }
+      ],
+      "item_layers": [
+        {
+          "id": "rope_layer",
+          "item": "rope",
+          "visible": true,
+          "decoy": false,
+          "shape": {
+            "kind": "rect",
+            "box": [
+              0.68,
+              0.56,
+              0.96,
+              0.92
+            ],
+            "points": null,
+            "color": "#ff8a3d",
+            "label": null
+          }
+        }
+      ],
+      "hotspots": [
+        {
+          "id": "rope_spot",
+          "name": "coil of rope",
+          "polygon": [
+            [
+              0.68,
+              0.56
+            ],
+            [
+              0.96,
+              0.56
+            ],
+            [
+              0.96,
+              0.92
+            ],
+            [
+              0.68,
+              0.92
+            ]
+          ],
+          "requires_layer_visible": "rope_layer",
+          "verbs": {
+            "look": {
+              "text": "A coil of rope lying in plain sight.",
+              "with_item": null,
+              "requires": null,
+              "effects": []
+            },
+            "take": {
+              "text": null,
+              "with_item": null,
+              "requires": null,
+              "effects": [
+                {
+                  "set_flag": null,
+                  "clear_flag": null,
+                  "give_item": "rope",
+                  "remove_item": null,
+                  "show_layer": null,
+                  "hide_layer": "rope_layer",
+                  "goto_scene": null,
+                  "text": "You take the coil of rope."
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "exits": [
+        {
+          "id": "to_site",
+          "name": "narrow passage",
+          "polygon": [
+            [
+              0.04,
+              0.08
+            ],
+            [
+              0.32,
+              0.08
+            ],
+            [
+              0.32,
+              0.42
+            ],
+            [
+              0.04,
+              0.42
+            ]
+          ],
+          "requires_layer_visible": null,
+          "verbs": {
+            "look": {
+              "text": "You could go through the narrow passage.",
+              "with_item": null,
+              "requires": null,
+              "effects": []
+            },
+            "go": {
+              "text": null,
+              "with_item": null,
+              "requires": null,
+              "effects": [
+                {
+                  "set_flag": null,
+                  "clear_flag": null,
+                  "give_item": null,
+                  "remove_item": null,
+                  "show_layer": null,
+                  "hide_layer": null,
+                  "goto_scene": "site",
+                  "text": "You squeeze through the passage."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "site",
+      "background": {
+        "color": "#1c140c"
+      },
+      "shapes": [
+        {
+          "kind": "rect",
+          "box": [
+            0.0,
+            0.5,
+            1.0,
+            1.0
+          ],
+          "points": null,
+          "color": "#2c3e50",
+          "label": "ground"
+        },
+        {
+          "kind": "rect",
+          "box": [
+            0.38,
+            0.3,
+            0.62,
+            0.62
+          ],
+          "points": null,
+          "color": "#ff2d55",
+          "label": "rubble"
+        },
+        {
+          "kind": "rect",
+          "box": [
+            0.04,
+            0.56,
+            0.32,
+            0.92
+          ],
+          "points": null,
+          "color": "#f4efe6",
+          "label": "way back"
+        }
+      ],
+      "item_layers": [],
+      "hotspots": [
+        {
+          "id": "rubble",
+          "name": "fallen rubble",
+          "polygon": [
+            [
+              0.38,
+              0.3
+            ],
+            [
+              0.62,
+              0.3
+            ],
+            [
+              0.62,
+              0.62
+            ],
+            [
+              0.38,
+              0.62
+            ]
+          ],
+          "requires_layer_visible": null,
+          "verbs": {
+            "look": {
+              "text": "You look at the fallen rubble.",
+              "with_item": null,
+              "requires": null,
+              "effects": []
+            },
+            "use": {
+              "text": null,
+              "with_item": "rope",
+              "requires": {
+                "flag": null,
+                "not_flag": "path_clear",
+                "has_item": null,
+                "layer_visible": null
+              },
+              "effects": [
+                {
+                  "set_flag": "path_clear",
+                  "clear_flag": null,
+                  "give_item": null,
+                  "remove_item": "rope",
+                  "show_layer": null,
+                  "hide_layer": null,
+                  "goto_scene": null,
+                  "text": "You lever the rubble aside with the coil of rope."
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "exits": [
+        {
+          "id": "to_yard",
+          "name": "way back",
+          "polygon": [
+            [
+              0.04,
+              0.56
+            ],
+            [
+              0.32,
+              0.56
+            ],
+            [
+              0.32,
+              0.92
+            ],
+            [
+              0.04,
+              0.92
+            ]
+          ],
+          "requires_layer_visible": null,
+          "verbs": {
+            "look": {
+              "text": "You could go through the way back.",
+              "with_item": null,
+              "requires": null,
+              "effects": []
+            },
+            "go": {
+              "text": null,
+              "with_item": null,
+              "requires": null,
+              "effects": [
+                {
+                  "set_flag": null,
+                  "clear_flag": null,
+                  "give_item": null,
+                  "remove_item": null,
+                  "show_layer": null,
+                  "hide_layer": null,
+                  "goto_scene": "yard",
+                  "text": "You climb back out."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "puzzle_graph": {
+    "nodes": [
+      {
+        "id": "get_rope",
+        "kind": "action",
+        "maps_to": {
+          "item": "rope",
+          "flag": null,
+          "hotspot": null
+        }
+      },
+      {
+        "id": "cleared",
+        "kind": "goal",
+        "maps_to": {
+          "item": null,
+          "flag": "path_clear",
+          "hotspot": null
+        }
+      }
+    ],
+    "edges": [
+      [
+        "get_rope",
+        "cleared"
+      ]
+    ]
+  }
+}

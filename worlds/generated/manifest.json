@@ -1,0 +1,78 @@
+{
+  "seed": 1,
+  "count": 8,
+  "worlds": [
+    {
+      "id": "tool_obstacle_00",
+      "template": "tool_obstacle",
+      "seed": 271041745,
+      "optimal_length": 3,
+      "scenes": 2,
+      "dials": null,
+      "file": "tool_obstacle_00.json"
+    },
+    {
+      "id": "two_scene_fetch_01",
+      "template": "two_scene_fetch",
+      "seed": 506456969,
+      "optimal_length": 4,
+      "scenes": 2,
+      "dials": null,
+      "file": "two_scene_fetch_01.json"
+    },
+    {
+      "id": "combine_02",
+      "template": "combine",
+      "seed": 1930549411,
+      "optimal_length": 4,
+      "scenes": 1,
+      "dials": null,
+      "file": "combine_02.json"
+    },
+    {
+      "id": "combine_03",
+      "template": "combine",
+      "seed": 1630434966,
+      "optimal_length": 4,
+      "scenes": 1,
+      "dials": null,
+      "file": "combine_03.json"
+    },
+    {
+      "id": "tool_obstacle_04",
+      "template": "tool_obstacle",
+      "seed": 403123852,
+      "optimal_length": 3,
+      "scenes": 2,
+      "dials": null,
+      "file": "tool_obstacle_04.json"
+    },
+    {
+      "id": "combine_05",
+      "template": "combine",
+      "seed": 121751464,
+      "optimal_length": 4,
+      "scenes": 1,
+      "dials": null,
+      "file": "combine_05.json"
+    },
+    {
+      "id": "combine_06",
+      "template": "combine",
+      "seed": 1858720390,
+      "optimal_length": 4,
+      "scenes": 1,
+      "dials": null,
+      "file": "combine_06.json"
+    },
+    {
+      "id": "chain3_07",
+      "template": "chain3",
+      "seed": 9045414,
+      "optimal_length": 5,
+      "scenes": 2,
+      "dials": null,
+      "file": "chain3_07.json"
+    }
+  ]
+}
