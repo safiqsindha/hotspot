@@ -1,0 +1,57 @@
+{
+  "id": "tiny_key_door",
+  "title": "The Locked Shed",
+  "start_scene": "yard",
+  "goal": {"flag": "shed_open"},
+  "scenes": [
+    {
+      "id": "yard",
+      "background": {"color": "#7fb069"},
+      "shapes": [
+        {"kind": "rect", "box": [0.55, 0.20, 0.90, 0.80], "color": "#8b5a2b", "label": "shed"},
+        {"kind": "rect", "box": [0.65, 0.40, 0.80, 0.80], "color": "#3b2412", "label": "door"}
+      ],
+      "item_layers": [
+        {
+          "id": "key_layer",
+          "item": "key",
+          "visible": true,
+          "shape": {"kind": "rect", "box": [0.06, 0.60, 0.28, 0.82], "color": "#ffd700"}
+        }
+      ],
+      "hotspots": [
+        {
+          "id": "key_spot",
+          "name": "brass key",
+          "polygon": [[0.06, 0.60], [0.28, 0.60], [0.28, 0.82], [0.06, 0.82]],
+          "requires_layer_visible": "key_layer",
+          "verbs": {
+            "look": {"text": "A small brass key in the grass."},
+            "take": {"effects": [{"give_item": "key"}, {"hide_layer": "key_layer"}]}
+          }
+        },
+        {
+          "id": "shed_door",
+          "name": "shed door",
+          "polygon": [[0.65, 0.40], [0.80, 0.40], [0.80, 0.80], [0.65, 0.80]],
+          "verbs": {
+            "look": {"text": "A sturdy door with a keyhole."},
+            "use": {
+              "with_item": "key",
+              "requires": {"not_flag": "shed_open"},
+              "effects": [{"set_flag": "shed_open"}, {"remove_item": "key"}]
+            }
+          }
+        }
+      ],
+      "exits": []
+    }
+  ],
+  "puzzle_graph": {
+    "nodes": [
+      {"id": "get_key", "kind": "action"},
+      {"id": "open_shed", "kind": "goal"}
+    ],
+    "edges": [["get_key", "open_shed"]]
+  }
+}

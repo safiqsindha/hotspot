@@ -1,0 +1,231 @@
+{
+  "id": "rope_and_well",
+  "title": "The Dry Well",
+  "start_scene": "courtyard",
+  "goal": {"flag": "water_raised"},
+  "scenes": [
+    {
+      "id": "courtyard",
+      "background": {"color": "#3f8f4a"},
+      "shapes": [
+        {"kind": "rect", "box": [0.00, 0.72, 1.00, 1.00], "color": "#8a6232", "label": "path"},
+        {"kind": "rect", "box": [0.58, 0.74, 0.72, 0.92], "color": "#1a1a1a", "label": "crack"},
+        {"kind": "ellipse", "box": [0.28, 0.28, 0.58, 0.66], "color": "#d0d0d0", "label": "well stones"},
+        {"kind": "ellipse", "box": [0.36, 0.38, 0.50, 0.56], "color": "#141414", "label": "well hole"},
+        {"kind": "rect", "box": [0.70, 0.12, 0.98, 0.84], "color": "#8b4513", "label": "shed"},
+        {"kind": "rect", "box": [0.78, 0.38, 0.92, 0.80], "color": "#3b2412", "label": "shed door"}
+      ],
+      "item_layers": [
+        {
+          "id": "rope_layer",
+          "item": "rope",
+          "visible": true,
+          "shape": {"kind": "rect", "box": [0.04, 0.62, 0.24, 0.90], "color": "#ffd000"}
+        },
+        {
+          "id": "coin_layer",
+          "item": "coin",
+          "visible": true,
+          "shape": {"kind": "ellipse", "box": [0.06, 0.16, 0.18, 0.32], "color": "#00e5ff"}
+        },
+        {
+          "id": "water_layer",
+          "item": null,
+          "visible": false,
+          "shape": {"kind": "ellipse", "box": [0.38, 0.42, 0.48, 0.54], "color": "#2f6fed"}
+        }
+      ],
+      "hotspots": [
+        {
+          "id": "rope_spot",
+          "name": "coil of rope",
+          "polygon": [[0.04, 0.62], [0.24, 0.62], [0.24, 0.90], [0.04, 0.90]],
+          "requires_layer_visible": "rope_layer",
+          "verbs": {
+            "look": {"text": "A thick coil of rope, more than long enough for the well."},
+            "take": {
+              "effects": [
+                {"give_item": "rope"},
+                {"hide_layer": "rope_layer"},
+                {"text": "You coil the rope over your shoulder."}
+              ]
+            }
+          }
+        },
+        {
+          "id": "coin_spot",
+          "name": "tarnished coin",
+          "polygon": [[0.06, 0.16], [0.18, 0.16], [0.18, 0.32], [0.06, 0.32]],
+          "requires_layer_visible": "coin_layer",
+          "verbs": {
+            "look": {"text": "A tarnished coin. It looks lucky, which is usually a bad sign."},
+            "take": {
+              "effects": [
+                {"give_item": "coin"},
+                {"hide_layer": "coin_layer"},
+                {"text": "You pocket the coin."}
+              ]
+            }
+          }
+        },
+        {
+          "id": "well",
+          "name": "stone well",
+          "polygon": [[0.30, 0.32], [0.56, 0.32], [0.56, 0.66], [0.30, 0.66]],
+          "verbs": {
+            "look": {"text": "The water is a long way down. A bucket on a rope might reach it."},
+            "use": {
+              "with_item": "rig",
+              "requires": {"not_flag": "water_raised"},
+              "effects": [
+                {"set_flag": "water_raised"},
+                {"remove_item": "rig"},
+                {"show_layer": "water_layer"},
+                {"text": "The bucket splashes down and comes up full."}
+              ]
+            }
+          }
+        },
+        {
+          "id": "wishing_niche",
+          "name": "crack in the stones",
+          "polygon": [[0.58, 0.74], [0.72, 0.74], [0.72, 0.92], [0.58, 0.92]],
+          "verbs": {
+            "look": {"text": "A dark crack at the foot of the well. People lose coins in it."},
+            "use": {
+              "with_item": "coin",
+              "effects": [
+                {"remove_item": "coin"},
+                {"set_flag": "made_a_wish"},
+                {"text": "You flick the coin into the crack. Nothing else happens."}
+              ]
+            }
+          }
+        }
+      ],
+      "exits": [
+        {
+          "id": "to_shed",
+          "name": "shed door",
+          "polygon": [[0.78, 0.38], [0.92, 0.38], [0.92, 0.80], [0.78, 0.80]],
+          "verbs": {
+            "look": {"text": "The shed door is ajar."},
+            "go": {
+              "effects": [
+                {"goto_scene": "shed"},
+                {"text": "You step into the shed."}
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "shed",
+      "background": {"color": "#2c1c12"},
+      "shapes": [
+        {"kind": "rect", "box": [0.08, 0.68, 0.62, 0.92], "color": "#c47a3a", "label": "workbench"},
+        {"kind": "rect", "box": [0.72, 0.22, 0.96, 0.82], "color": "#e0a060", "label": "doorway"}
+      ],
+      "item_layers": [
+        {
+          "id": "bucket_layer",
+          "item": "bucket",
+          "visible": true,
+          "shape": {"kind": "rect", "box": [0.12, 0.34, 0.34, 0.64], "color": "#2f6fed"}
+        },
+        {
+          "id": "hook_layer",
+          "item": "hook",
+          "visible": true,
+          "shape": {"kind": "rect", "box": [0.40, 0.30, 0.60, 0.60], "color": "#f4f4f4"}
+        }
+      ],
+      "hotspots": [
+        {
+          "id": "bucket_spot",
+          "name": "wooden bucket",
+          "polygon": [[0.12, 0.34], [0.34, 0.34], [0.34, 0.64], [0.12, 0.64]],
+          "requires_layer_visible": "bucket_layer",
+          "verbs": {
+            "look": {"text": "A wooden bucket with a stout handle."},
+            "take": {
+              "effects": [
+                {"give_item": "bucket"},
+                {"hide_layer": "bucket_layer"},
+                {"text": "You take the bucket."}
+              ]
+            }
+          }
+        },
+        {
+          "id": "hook_spot",
+          "name": "iron hook",
+          "polygon": [[0.40, 0.30], [0.60, 0.30], [0.60, 0.60], [0.40, 0.60]],
+          "requires_layer_visible": "hook_layer",
+          "verbs": {
+            "look": {"text": "An iron hook, heavy enough to sink a bucket."},
+            "take": {
+              "effects": [
+                {"give_item": "hook"},
+                {"set_flag": "holding_hook"},
+                {"hide_layer": "hook_layer"},
+                {"text": "You take the iron hook."}
+              ]
+            }
+          }
+        },
+        {
+          "id": "workbench",
+          "name": "workbench",
+          "polygon": [[0.08, 0.68], [0.62, 0.68], [0.62, 0.92], [0.08, 0.92]],
+          "verbs": {
+            "look": {"text": "A scarred bench. A good place to tie a knot."},
+            "use": {
+              "with_item": "rope",
+              "requires": {"has_item": "bucket", "flag": "holding_hook"},
+              "effects": [
+                {"remove_item": "rope"},
+                {"remove_item": "bucket"},
+                {"remove_item": "hook"},
+                {"give_item": "rig"},
+                {"text": "You tie the rope to the bucket and weight it with the hook."}
+              ]
+            }
+          }
+        }
+      ],
+      "exits": [
+        {
+          "id": "to_courtyard",
+          "name": "door to the courtyard",
+          "polygon": [[0.72, 0.22], [0.96, 0.22], [0.96, 0.82], [0.72, 0.82]],
+          "verbs": {
+            "look": {"text": "Daylight, and the well, are back through here."},
+            "go": {
+              "effects": [
+                {"goto_scene": "courtyard"},
+                {"text": "You step back into the courtyard."}
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "puzzle_graph": {
+    "nodes": [
+      {"id": "get_rope", "kind": "action"},
+      {"id": "get_hook", "kind": "action"},
+      {"id": "get_bucket", "kind": "action"},
+      {"id": "make_rig", "kind": "action"},
+      {"id": "raised_water", "kind": "goal"}
+    ],
+    "edges": [
+      ["get_rope", "make_rig"],
+      ["get_hook", "make_rig"],
+      ["get_bucket", "make_rig"],
+      ["make_rig", "raised_water"]
+    ]
+  }
+}
